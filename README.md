@@ -21,3 +21,4 @@ Log
 
 2014-11-16
 - upload of etrust.csv data file: a list of NHS trusts and sites incl. addresses from http://data.gov.uk/dataset/england-nhs-connecting-for-health-organisation-data-service-data-files-of-nhsorganisations
+- started geocoding script to elucidate the coordinates of all NHS trust sites
