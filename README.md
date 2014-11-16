@@ -11,6 +11,8 @@ This is a repository for mapping public health data in the UK using open source 
   + a list of NHS Trusts and sites incl. addresses
 - data/acci-emer-atte-end-2012-2013-pla.xls
   + NHS A&E attendance data for 2012/2013
+- data/Hospital.csv
+  + details (e.g. contact details/addresses) of Hospitals in the UK, incl. private hospitals
 
 Log
 ===
