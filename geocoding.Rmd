@@ -1,0 +1,31 @@
+---
+title: "Geocoding NHS Trust Sites"
+author: "Danny Wong"
+date: "Sunday, November 16, 2014"
+output: html_document
+---
+
+We first clean the data that has been provided in .csv format. To allow us to process it for geocoding.
+
+```
+#We read the etrust.csv file, setting header = FALSE as the file doesn't contain headers, and the argument colClasses indicates that we only want to read the first 12 columns
+sites <- read.csv ("data/etrust.csv", header = FALSE, colClasses = c(rep("character", 12), rep("NULL", 15)))
+
+#We now want to give variable names to each column, this uses the plyr package
+library(plyr)
+sites <- rename(sites, c("V1" = "organisation_code", "V2" = "name", "V3" = "national_grouping", "V4" = "high_lvl_health_geog", "V5" = "address1", "V6" = "address2", "V7" = "address3", "V8" = "address4", "V9" = "address5", "V10" = "postcode", "V11" = "open_date", "V12" = "close_date"))
+```
+
+We are now able to start the geocoding process
+
+```
+#Load the required libary
+library(ggmap)
+
+#Start the geocoding process by forming an address string
+addresses = sites$name
+addresses = paste0(addresses, ", ", sites$address1, ", ", sites$address2, ", ", sites$address3, ", ", sites$address4, ", ", sites$address5, ", ", sites$postcode, ", UK")
+
+#Geocode! At the moment Google's API only allows 2500 requests a day per IP address. So this means we will have to batch process our requests.
+geocode_output1 <- geocode(addresses[1:2500], output="more", messaging=TRUE, override_limit=TRUE)
+```
