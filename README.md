@@ -25,4 +25,7 @@ Log
 2014-11-16
 - upload of etrust.csv data file: a list of NHS trusts and sites incl. addresses from http://data.gov.uk/dataset/england-nhs-connecting-for-health-organisation-data-service-data-files-of-nhsorganisations
 - started geocoding script to elucidate the coordinates of all NHS trust sites
-- upload of Hospital.csv data file: a list of all hospitals from the NHS Choices website
+- upload of Hospital.csv data file: a list of all hospitals from the NHS Choices website. From: http://media.nhschoices.nhs.uk/data/foi/Hospital.csv
+
+2014-11-17
+- Made a map from Hospital.csv file via a GeoJSON file using MakeGeoJSON.Rmd
