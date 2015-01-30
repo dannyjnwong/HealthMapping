@@ -21,6 +21,11 @@ require("ggplot2")
 require("plyr")
 
 #Load the shapefile data
-
+setwd("~/R/HealthMapping/shapefiles/GBPostcodeAreas") #The shapefiles need to be in the working directory
+UKpostcodes <- readOGR(dsn=".", layer="gb_pca_2010")
+#UKpostcodes@data$id = rownames(UKpostcodes@data)
+#UKpostcodes.points = fortify(UKpostcodes, region="id")
+#UKpostcodes.df = join(UKpostcodes.points, UKpostcodes@data, by="id")
 ```
 
+r
