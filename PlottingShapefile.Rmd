@@ -1,0 +1,26 @@
+---
+title: "Plotting Shapefile"
+author: "Danny Wong"
+date: "Friday, January 30, 2015"
+output: html_document
+---
+
+This is a script for plotting a shapefile in R using ggplot2.
+
+Sources: 
+ * Method
+    + https://github.com/hadley/ggplot2/wiki/plotting-polygon-shapefiles
+ * Data
+    + http://www.sharegeo.ac.uk/handle/10672/51?show=full
+
+```{r}
+#Load the required packages
+require("rgdal")
+require("maptools")
+require("ggplot2")
+require("plyr")
+
+#Load the shapefile data
+
+```
+
