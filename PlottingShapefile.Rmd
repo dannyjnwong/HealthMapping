@@ -10,22 +10,36 @@ This is a script for plotting a shapefile in R using ggplot2.
 Sources: 
  * Method
     + https://github.com/hadley/ggplot2/wiki/plotting-polygon-shapefiles
+    + http://prabhasp.com/wp/how-to-make-choropleths-in-r/
  * Data
     + http://www.sharegeo.ac.uk/handle/10672/51?show=full
 
 ```{r}
 #Load the required packages
-require("rgdal")
-require("maptools")
-require("ggplot2")
-require("plyr")
+#require("rgdal")
+require(rgeos)
+require(maptools)
+require(gpclib)
+require(ggplot2)
+require(plyr)
+
+#Load postcode lists
+Postcodedata <- read.csv("data/postcode.csv")
+
+#Generate test data
+set.seed(1)
+Postcodedata$data <- rnorm(119, mean = 50, sd = 25)
 
 #Load the shapefile data
-setwd("~/R/HealthMapping/shapefiles/GBPostcodeAreas") #The shapefiles need to be in the working directory
-UKpostcodes <- readOGR(dsn=".", layer="gb_pca_2010")
-#UKpostcodes@data$id = rownames(UKpostcodes@data)
-#UKpostcodes.points = fortify(UKpostcodes, region="id")
-#UKpostcodes.df = join(UKpostcodes.points, UKpostcodes@data, by="id")
+UKpostcodes <- readShapeSpatial("shapefiles/GBPostcodeAreas/gb_pca_2010.shp")
+#Verify it loaded correctly
+plot(UKpostcodes)
+
+#Plot the shapes using ggplot2
+UKpostcodes <- fortify(UKpostcodes, region = "Label")
+ggplot() + 
+  geom_map(data = Postcodedata, aes(map_id = Label, fill = data), map = UKpostcodes) + 
+  expand_limits(x = UKpostcodes$long, y = UKpostcodes$lat)
 ```
 
 r
