@@ -5,7 +5,7 @@ date: "Friday, January 30, 2015"
 output: html_document
 ---
 
-This is a script for plotting a shapefile in R using ggplot2.
+This is a script for plotting shapefiles in R using ggplot2.
 
 Sources: 
  * Method
@@ -30,6 +30,9 @@ Postcodedata <- read.csv("data/postcode.csv")
 set.seed(1)
 Postcodedata$data <- rnorm(119, mean = 50, sd = 25)
 
+#Load some Geocoded Hospitals 
+hospitals <- read.csv("data/sitesfinal_Geocoded.csv")
+
 #Load the shapefile data
 UKpostcodes <- readShapeSpatial("shapefiles/GBPostcodeAreas/gb_pca_2010.shp")
 #Verify it loaded correctly
@@ -40,6 +43,5 @@ UKpostcodes <- fortify(UKpostcodes, region = "Label")
 ggplot() + 
   geom_map(data = Postcodedata, aes(map_id = Label, fill = data), map = UKpostcodes) + 
   expand_limits(x = UKpostcodes$long, y = UKpostcodes$lat)
+# + geom_point(data = hospitals, aes(lon, lat,fill = NULL,group = NULL), size = 1)
 ```
-
-r

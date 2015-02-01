@@ -1,0 +1,25 @@
+---
+title: "Online Mapping with Leaflet"
+author: "Danny Wong"
+date: "Sunday, February 01, 2015"
+output: html_document
+---
+
+This is a script to map with leaflet.js
+
+Sources:
+  * Method
+    + http://www.r-bloggers.com/the-leaflet-package-for-online-mapping-in-r/
+    + https://github.com/rstudio/leaflet/blob/master/vignettes/leaflet.Rmd
+  * Data
+
+```{r}
+#Load the required packages
+require(leaflet)
+
+#Add the default leaflet map
+m <- leaflet() %>% addTiles()
+m = m %>% setView(-3, 54, zoom = 6)
+m
+```
+
