@@ -34,14 +34,15 @@ Postcodedata$data <- rnorm(119, mean = 50, sd = 25)
 hospitals <- read.csv("data/sitesfinal_Geocoded.csv")
 
 #Load the shapefile data
-UKpostcodes <- readShapeSpatial("shapefiles/GBPostcodeAreas/gb_pca_2010.shp")
+UKpostcodes <- readShapeSpatial("shapefiles/GB_Postcodes/PostalArea.shp")
 #Verify it loaded correctly
 plot(UKpostcodes)
 
 #Plot the shapes using ggplot2
-UKpostcodes <- fortify(UKpostcodes, region = "Label")
-ggplot() + 
-  geom_map(data = Postcodedata, aes(map_id = Label, fill = data), map = UKpostcodes) + 
+UKpostcodes <- fortify(UKpostcodes, region = "PostArea")
+map <- ggplot(Postcodedata) + 
+  geom_map(map = UKpostcodes, aes(map_id = Label, fill = data)) + 
+  coord_map() +
   expand_limits(x = UKpostcodes$long, y = UKpostcodes$lat)
-# + geom_point(data = hospitals, aes(lon, lat,fill = NULL,group = NULL), size = 1)
+map + geom_point(data = hospitals, mapping = aes(x = lon, y = lat,fill = NULL,group = NULL), size = 1)
 ```
