@@ -12,7 +12,7 @@ Sources:
     + https://github.com/hadley/ggplot2/wiki/plotting-polygon-shapefiles
     + http://prabhasp.com/wp/how-to-make-choropleths-in-r/
  * Data
-    + http://www.sharegeo.ac.uk/handle/10672/51?show=full
+    + http://www.sharegeo.ac.uk/handle/10672/553
 
 ```{r}
 #Load the required packages
@@ -38,16 +38,24 @@ GBpostcodes <- readShapeSpatial("shapefiles/GB_Postcodes/PostalArea.shp")
 #Verify it loaded correctly
 plot(GBpostcodes)
 
-#This shapefile is in the British National Grid Projection OSGB1936 (EPSG:27700), so we need to convert it to the WGS84 coordinate reference system
-proj4string(GBpostcodes) <- "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs"
-GBpostcodes_WGS84 <- spTransform(GBpostcodes, CRS("+proj=longlat +datum=WGS84"))
+##This shapefile is in the British National Grid Projection OSGB1936 (EPSG:27700), so we need to convert it to the WGS84 coordinate reference system. However I have been having problems getting this to work because of the error message, reproduced below
+#proj4string(GBpostcodes) <- "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs"
+#GBpostcodes_WGS84 <- spTransform(GBpostcodes, CRS("+proj=longlat +datum=WGS84"))
 
 #Plot the shapes using ggplot2
-GBpostcodes_WGS84 <- fortify(GBpostcodes_WGS84, region = "PostArea") #I keep getting this error "Error: TopologyException: Input geom 0 is invalid: Self-intersection at or near point -6.5346772511079969 58.098792701899775 at -6.5346772511079969 58.098792701899775"
+#GBpostcodes_WGS84 <- fortify(GBpostcodes_WGS84, region = "PostArea") #I keep getting this error "Error: TopologyException: Input geom 0 is invalid: Self-intersection at or near point -6.5346772511079969 58.098792701899775 at -6.5346772511079969 58.098792701899775"
+
+#As a result, I will plot the shapefiles in its existing CRS, and force the lat/lon codes for the points into the same CRS
+GBpostcodes <- fortify(GBpostcodes, region = "PostArea")
+
+#Transform the hospitals coordinates into the British National Grid Projection OSGB1936 (EPSG:27700)
+hospitals <- SpatialPoints(hospitals[,c("lon","lat")],proj4string=CRS("+proj=longlat +datum=WGS84"))
+hospitals <- spTransform(hospitals,CRS("+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs"))
+hospitals.df <- data.frame(coordinates(hospitals))
 
 map <- ggplot(Postcodedata) + 
-  geom_map(map = GBpostcodes_WGS84, aes(map_id = Label, fill = data)) + 
+  geom_map(map = GBpostcodes, aes(map_id = Label, fill = data)) + 
   coord_map() +
-  expand_limits(x = GBpostcodes_WGS84$long, y = GBpostcodes_WGS84$lat)
-map + geom_point(data = hospitals, mapping = aes(x = lon, y = lat,fill = NULL,group = NULL), colour = "red", size = 1)
+  expand_limits(x = GBpostcodes$long, y = GBpostcodes$lat)
+map + geom_point(data = hospitals.df, mapping = aes(x = lon, y = lat,fill = NULL,group = NULL), colour = "red", size = 1)
 ```
