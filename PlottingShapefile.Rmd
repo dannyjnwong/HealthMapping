@@ -1,5 +1,5 @@
 ---
-title: "Plotting Shapefile"
+title: "Plotting Shapefiles with ggplot2"
 author: "Danny Wong"
 date: "Friday, January 30, 2015"
 output: html_document
@@ -13,6 +13,8 @@ Sources:
     + http://prabhasp.com/wp/how-to-make-choropleths-in-r/
  * Data
     + http://www.sharegeo.ac.uk/handle/10672/553
+    + http://www.opendoorlogistics.com/downloads/
+    + http://www.doogal.co.uk/
 
 ```{r}
 #Load the required packages
@@ -28,12 +30,12 @@ Postcodedata <- read.csv("data/postcode.csv")
 
 #Generate test data
 set.seed(1)
-Postcodedata$data <- rnorm(120, mean = 50, sd = 25)
+Postcodedata$data <- rnorm(124, mean = 50, sd = 25)
 
 #Load some Geocoded Hospitals 
 hospitals <- read.csv("data/sitesfinal_Geocoded.csv")
 
-#Load the shapefile data
+#Load the shapefile data from http://www.sharegeo.ac.uk/handle/10672/553
 GBpostcodes <- readShapeSpatial("shapefiles/GB_Postcodes/PostalArea.shp")
 #Verify it loaded correctly
 plot(GBpostcodes)
@@ -55,7 +57,45 @@ hospitals.df <- data.frame(coordinates(hospitals))
 
 map <- ggplot(Postcodedata) + 
   geom_map(map = GBpostcodes, aes(map_id = Label, fill = data)) + 
-  coord_map() +
   expand_limits(x = GBpostcodes$long, y = GBpostcodes$lat)
 map + geom_point(data = hospitals.df, mapping = aes(x = lon, y = lat,fill = NULL,group = NULL), colour = "red", size = 1)
+```
+
+There are a number of problems with the shapefile used for the above plot:
+1. The shapefile is huge: 40.1mb! Thus plotting takes forever
+2. The shapefile has missed out Northern Ireland. So only displays Great Britain and not the entire UK
+3. The shapefile uses the British National Grid Projection, and hence we need to workaround it if we have geocoded latitude and longitude coordinates in the WGS84 coordinate reference system.
+
+Having a look around online, we find that there are other shapefiles that we can use, one that is maintained by Open Door Logistics at http://www.opendoorlogistics.com/downloads/
+
+```{r}
+#Load the required packages
+require(rgdal)
+require(rgeos)
+require(maptools)
+require(gpclib)
+require(ggplot2)
+require(plyr)
+
+#Load postcode lists
+Postcodedata <- read.csv("data/postcode.csv")
+
+#Generate test data
+set.seed(1)
+Postcodedata$data <- rnorm(124, mean = 50, sd = 25)
+
+#Load some Geocoded Hospitals 
+hospitals <- read.csv("data/sitesfinal_Geocoded.csv")
+
+#Load the shapefile data from http://www.sharegeo.ac.uk/handle/10672/553
+UKpostcodes <- readShapeSpatial("shapefiles/opendata/Areas.shp")
+#Verify it loaded correctly
+plot(UKpostcodes)
+
+UKpostcodes <- fortify(UKpostcodes, region = "name")
+map <- ggplot(Postcodedata) + 
+  geom_map(map = UKpostcodes, aes(map_id = Label, fill = data)) + 
+#  coord_map() +
+  expand_limits(x = UKpostcodes$long, y = UKpostcodes$lat)
+map + geom_point(data = hospitals, mapping = aes(x = lon, y = lat,fill = NULL,group = NULL), colour = "red", size = 1)
 ```
