@@ -19,11 +19,8 @@ Sources:
 ```{r}
 #Load the required packages
 require(rgdal)
-require(rgeos)
 require(maptools)
-require(gpclib)
 require(ggplot2)
-require(plyr)
 
 #Load postcode lists
 Postcodedata <- read.csv("data/postcode.csv")
@@ -70,12 +67,8 @@ Having a look around online, we find that there are other shapefiles that we can
 
 ```{r}
 #Load the required packages
-require(rgdal)
-require(rgeos)
 require(maptools)
-require(gpclib)
 require(ggplot2)
-require(plyr)
 
 #Load postcode lists
 Postcodedata <- read.csv("data/postcode.csv")
