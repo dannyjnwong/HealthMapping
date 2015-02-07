@@ -8,13 +8,19 @@ output: html_document
 This is a script for plotting shapefiles in R using ggplot2.
 
 Sources: 
- * Method
-    + https://github.com/hadley/ggplot2/wiki/plotting-polygon-shapefiles
-    + http://prabhasp.com/wp/how-to-make-choropleths-in-r/
- * Data
-    + http://www.sharegeo.ac.uk/handle/10672/553
-    + http://www.opendoorlogistics.com/downloads/
-    + http://www.doogal.co.uk/
+
+* Method
+    - https://github.com/hadley/ggplot2/wiki/plotting-polygon-shapefiles
+    - http://prabhasp.com/wp/how-to-make-choropleths-in-r/
+* Data
+    - http://www.sharegeo.ac.uk/handle/10672/553
+    - http://www.opendoorlogistics.com/downloads/
+    - http://www.doogal.co.uk/
+    
+In many areas of public health medicine, data may be better represented on a map as a choropleth--a thematic map in which areas are proportionally shaded/coloured according to the statistical variable being displayed, e.g. mortality rate, or disease prevalence. 
+
+Here I show how to make a choropleth with UK postcode boundaries in R. I then overlay the map with some discrete coordinates, which could represent the site of some hospitals in the UK.
+
 
 ```{r}
 #Load the required packages
@@ -59,6 +65,7 @@ map + geom_point(data = hospitals.df, mapping = aes(x = lon, y = lat,fill = NULL
 ```
 
 There are a number of problems with the shapefile used for the above plot:
+
 1. The shapefile is huge: 40.1mb! Thus plotting takes forever
 2. The shapefile has missed out Northern Ireland. So only displays Great Britain and not the entire UK
 3. The shapefile uses the British National Grid Projection, and hence we need to workaround it if we have geocoded latitude and longitude coordinates in the WGS84 coordinate reference system.
@@ -92,3 +99,5 @@ map <- ggplot(Postcodedata) +
   expand_limits(x = UKpostcodes$long, y = UKpostcodes$lat)
 map + geom_point(data = hospitals, mapping = aes(x = lon, y = lat,fill = NULL,group = NULL), colour = "red", size = 1)
 ```
+
+The resulting plot from the second code chunk is much faster to render, and shows other parts of the UK (not just Great Britain), including Northern Ireland.
