@@ -16,7 +16,7 @@ Sources:
 
 ```{r}
 #Load the required packages
-#require("rgdal")
+require(rgdal)
 require(rgeos)
 require(maptools)
 require(gpclib)
@@ -28,21 +28,26 @@ Postcodedata <- read.csv("data/postcode.csv")
 
 #Generate test data
 set.seed(1)
-Postcodedata$data <- rnorm(119, mean = 50, sd = 25)
+Postcodedata$data <- rnorm(120, mean = 50, sd = 25)
 
 #Load some Geocoded Hospitals 
 hospitals <- read.csv("data/sitesfinal_Geocoded.csv")
 
 #Load the shapefile data
-UKpostcodes <- readShapeSpatial("shapefiles/GB_Postcodes/PostalArea.shp")
+GBpostcodes <- readShapeSpatial("shapefiles/GB_Postcodes/PostalArea.shp")
 #Verify it loaded correctly
-plot(UKpostcodes)
+plot(GBpostcodes)
+
+#This shapefile is in the British National Grid Projection OSGB1936 (EPSG:27700), so we need to convert it to the WGS84 coordinate reference system
+proj4string(GBpostcodes) <- "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs"
+GBpostcodes_WGS84 <- spTransform(GBpostcodes, CRS("+proj=longlat +datum=WGS84"))
 
 #Plot the shapes using ggplot2
-UKpostcodes <- fortify(UKpostcodes, region = "PostArea")
+GBpostcodes_WGS84 <- fortify(GBpostcodes_WGS84, region = "PostArea") #I keep getting this error "Error: TopologyException: Input geom 0 is invalid: Self-intersection at or near point -6.5346772511079969 58.098792701899775 at -6.5346772511079969 58.098792701899775"
+
 map <- ggplot(Postcodedata) + 
-  geom_map(map = UKpostcodes, aes(map_id = Label, fill = data)) + 
+  geom_map(map = GBpostcodes_WGS84, aes(map_id = Label, fill = data)) + 
   coord_map() +
-  expand_limits(x = UKpostcodes$long, y = UKpostcodes$lat)
-map + geom_point(data = hospitals, mapping = aes(x = lon, y = lat,fill = NULL,group = NULL), size = 1)
+  expand_limits(x = GBpostcodes_WGS84$long, y = GBpostcodes_WGS84$lat)
+map + geom_point(data = hospitals, mapping = aes(x = lon, y = lat,fill = NULL,group = NULL), colour = "red", size = 1)
 ```
