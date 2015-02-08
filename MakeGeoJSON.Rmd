@@ -7,6 +7,12 @@ output: html_document
 
 This is a script which makes a GeoJSON file from the Hospitals list from NHS Choices that can be fed into a map on Github.
 
+*Data
+    - path: ./data/Hospital.csv
+    - details (e.g. contact details/addresses) of Hospitals in the UK, incl. private hospitals
+    - this file already contains latitude and longitude codes for the hospital sites! So no need to geocode
+    - from: http://media.nhschoices.nhs.uk/data/foi/Hospital.csv
+
 ```
 #Load the required libraries
 library(rgdal)

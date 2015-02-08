@@ -5,10 +5,17 @@ date: "Sunday, November 16, 2014"
 output: html_document
 ---
 
+This is a script for Geocoding NHS sites (obtaining latitude and longitude coordinates from Hospital name strings)
+.
+*Data
+    - path: ./data/etrust.csv
+    - a list of NHS Trusts and sites incl. addresses
+    - from: http://systems.hscic.gov.uk/data/ods/datadownloads/othernhs/index_html
+
 ##Geocoding data/etrust.csv
 We first clean the data that has been provided in .csv format. To allow us to process it for geocoding.
 
-```
+``` {r}
 #We read the etrust.csv file, setting header = FALSE as the file doesn't contain headers, and the argument colClasses indicates that we only want to read the first 12 columns
 sites <- read.csv ("data/etrust.csv", header = FALSE, colClasses = c(rep("character", 12), rep("NULL", 15)))
 
@@ -19,7 +26,7 @@ sites <- rename(sites, c("V1" = "organisation_code", "V2" = "name", "V3" = "nati
 
 We are now able to start the geocoding process
 
-```
+``` {r}
 #Load the required libary
 library(ggmap)
 

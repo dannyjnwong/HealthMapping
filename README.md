@@ -9,6 +9,7 @@ This is a repository for mapping public health data in the UK using open source 
 **Data sources**
 - data/etrust.csv
   + a list of NHS Trusts and sites incl. addresses
+  + from: http://systems.hscic.gov.uk/data/ods/datadownloads/othernhs/index_html
 - data/acci-emer-atte-end-2012-2013-pla.xls
   + NHS A&E attendance data for 2012/2013
   + from: http://data.gov.uk/data/resource_cache/20/204b1b55-1d0a-42eb-8b4b-bd42be229b5b/aandeattendance1213
