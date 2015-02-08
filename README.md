@@ -21,8 +21,9 @@ This is a repository for mapping public health data in the UK using open source 
   + NHS England Bed Availability and Occupancy
   + Original file is: Beds-Open-Overnight-Web_File-Q2-2014-15-Final.xlsx
   + from: http://www.england.nhs.uk/statistics/statistical-work-areas/bed-availability-and-occupancy/bed-data-overnight/
+  
 Log
-===
+---
 
 2014-11-15
 - file created
