@@ -8,18 +8,36 @@ output: html_document
 This is a script to map with leaflet.js
 
 Sources:
-  * Method
-    + http://www.r-bloggers.com/the-leaflet-package-for-online-mapping-in-r/
-    + https://github.com/rstudio/leaflet/blob/master/vignettes/leaflet.Rmd
-  * Data
-
+* Method
+    - http://www.r-bloggers.com/the-leaflet-package-for-online-mapping-in-r/
+    - https://github.com/rstudio/leaflet/blob/master/vignettes/leaflet.Rmd
+    - https://jcheng.shinyapps.io/choropleth/
+    - for simplifying polygons: http://www.r-bloggers.com/simplifying-polygon-shapefiles-in-r/
+* Data
+    - We will use the same data used in PlottingShapefile.Rmd
+    - http://www.opendoorlogistics.com/downloads/
+    
 ```{r}
 #Load the required packages
 require(leaflet)
+require(maptools)
+
+#Load the data
+Postcodedata <- read.csv("data/postcode.csv")
+set.seed(1)
+Postcodedata$data <- rnorm(124, mean = 50, sd = 25)
+hospitals <- read.csv("data/sitesfinal_Geocoded.csv")
+UKpostcodes <- readShapeSpatial("shapefiles/opendata/Areas.shp")
+
+#Since we are plotting this shapefile onto a webmap, we need to simplify the polygons in order for the rendering to be a bit quicker
+#*This will be added later*
 
 #Add the default leaflet map
 m <- leaflet() %>% addTiles()
-m = m %>% setView(-3, 54, zoom = 6)
-m
+
+#Add UK postcode polygons
+m %>% addPolygons(data = UKpostcodes, weight = 1, color = "white", fillColor = heat.colors(10, alpha = NULL))
+
+
 ```
 

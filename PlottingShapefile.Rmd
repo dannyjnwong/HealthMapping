@@ -87,7 +87,7 @@ Postcodedata$data <- rnorm(124, mean = 50, sd = 25)
 #Load some Geocoded Hospitals 
 hospitals <- read.csv("data/sitesfinal_Geocoded.csv")
 
-#Load the shapefile data from http://www.sharegeo.ac.uk/handle/10672/553
+#Load the shapefile data from http://www.opendoorlogistics.com/downloads/
 UKpostcodes <- readShapeSpatial("shapefiles/opendata/Areas.shp")
 #Verify it loaded correctly
 plot(UKpostcodes)

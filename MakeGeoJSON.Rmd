@@ -13,7 +13,7 @@ This is a script which makes a GeoJSON file from the Hospitals list from NHS Cho
     - this file already contains latitude and longitude codes for the hospital sites! So no need to geocode
     - from: http://media.nhschoices.nhs.uk/data/foi/Hospital.csv
 
-```
+``` {r}
 #Load the required libraries
 library(rgdal)
 
