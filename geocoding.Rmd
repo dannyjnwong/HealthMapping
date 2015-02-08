@@ -24,7 +24,7 @@ library(plyr)
 sites <- rename(sites, c("V1" = "organisation_code", "V2" = "name", "V3" = "national_grouping", "V4" = "high_lvl_health_geog", "V5" = "address1", "V6" = "address2", "V7" = "address3", "V8" = "address4", "V9" = "address5", "V10" = "postcode", "V11" = "open_date", "V12" = "close_date"))
 ```
 
-We are now able to start the geocoding process
+We are now able to start the geocoding process. The following chunk will geocode the first 2500 sites in the dataframe (out of over 25,000 sites).
 
 ``` {r}
 #Load the required libary
